@@ -3,6 +3,11 @@
 RectangleDlg::RectangleDlg(QWidget *parent)
       :QWidget (parent)
 {
+    //初始化
+    m_realh=0;
+    m_realw=0;
+    m_width=0;
+    m_heigh=0;
     this->resize(QSize(800,550));
     setMinimumSize(800,550);
     setMaximumSize(800,550);
@@ -25,9 +30,10 @@ void RectangleDlg::set(int width,int heigh,int distance,int way){
         m_heigh=0;
     else
         m_heigh=heigh;
+    m_distance=distance;
     m_startx=(800-m_realw*m_distance)/2;
     m_starty=(550-m_realh*m_distance)/2;
-    m_distance=distance;
+    update();
 }
 
 void RectangleDlg::paintEvent(QPaintEvent*){

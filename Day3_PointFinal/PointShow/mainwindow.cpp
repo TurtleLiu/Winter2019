@@ -72,43 +72,12 @@ MainWindow::~MainWindow()
 
 }
 void MainWindow::startDirect(){
-    QString Width;
-    QString Heigh;
-    QString Distance;
-    int width;
-    int heigh;
-    int distance;
-    int paintwidth=800;
-    int paintheigh=550;
-    //取得文本内容信息
-    Width=WidthEdit->text().trimmed();
-    Heigh=HeighEdit->text().trimmed();
-    Distance=DistanceEdit->text().trimmed();
-    width=Width.toInt();
-    heigh=Heigh.toInt();
-    if(DistanceEdit->text().isEmpty())
-        {distance=5;}
-    else
-        distance=Distance.toInt();
-    //条件判断，是否可以完整显示图形
-    if(paintwidth-width*distance<0||paintheigh-heigh*distance<0){
-        QMessageBox::warning(this, tr("警告！"),tr("图形太大，超出画布范围！"),QMessageBox::Yes);
-        // 清空内容并定位光标
-        WidthEdit->clear();
-        HeighEdit->clear();
-        DistanceEdit->clear();
-        WidthEdit->setFocus();
-    }
-    else if(paint_flag==0){
-        CirclePainter->set(width,heigh,distance,0);
-        CirclePainter->update();
-    }
-    else{
-        RectanglePainter->set(width,heigh,distance,0);
-        RectanglePainter->update();
-    }
+    inter(0);
 }
 void MainWindow::startStep(){
+    inter(1);
+}
+void MainWindow::inter(int way){//界面交互
     QString Width;
     QString Heigh;
     QString Distance;
@@ -137,25 +106,29 @@ void MainWindow::startStep(){
         WidthEdit->setFocus();
     }
     else if(paint_flag==0){
-        CirclePainter->set(width,heigh,distance,1);
-        CirclePainter->timer->start(500);
+        CirclePainter->set(width,heigh,distance,way);
+        if(way==1)
+            CirclePainter->timer->start(500);
     }
     else{
-        RectanglePainter->set(width,heigh,distance,1);
-        RectanglePainter->timer->start(500);
+        RectanglePainter->set(width,heigh,distance,way);
+        if(way==1)
+            RectanglePainter->timer->start(500);
     }
 }
 void MainWindow::jump(){
     if(paint_flag==0){
-        paint_flag=1;
         JumpButton->setText(tr("切换为圆形"));
         RectanglePainter->show();
-        CirclePainter->hide();
+        RectanglePainter->set(0,0,0,0);
+        CirclePainter->close();
+        paint_flag=1;
     }
     else{
-        paint_flag=0;
         JumpButton->setText(tr("切换为矩形"));
         CirclePainter->show();
-        RectanglePainter->hide();
+        CirclePainter->set(0,0,0,0);
+        RectanglePainter->close();
+        paint_flag=0;
     }
 }

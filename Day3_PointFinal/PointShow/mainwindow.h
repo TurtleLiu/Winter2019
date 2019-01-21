@@ -24,6 +24,7 @@ private slots:
     void startDirect();
     void startStep();
     void jump();
+    void inter(int way);//界面交互函数
 private:
     //宽度组，变量声明不要初始化，类内部可以以m_开头
     QLabel *WidthLabel;
